@@ -27,6 +27,9 @@ class Router
                         $route[$k]=$v;
                     }
                 }
+                if(!isset($route['action'])){
+                    $route['action'] = 'index';
+                }
                 debug($route);
                 self::$route = $route;
                 return true;
@@ -45,12 +48,38 @@ class Router
     public static function dispath($url)
     {
         if(self::machRoute($url)){
-            echo 'OK';
-        }else{
-            http_response_code(404);
-            include '404.html';
+            $controller = self::upperCamelCase(self::$route['controller']);
+            if(class_exists($controller)){
+                $controllerObject = new $controller;
+                $action = self::$route['action'];
+
+                if(method_exists($controllerObject, $action)){
+                    $controllerObject->$action();
+                }else{
+                    echo "Метод <b>$controller::$action</b> не найден";
+                }
+
+            }else{
+                echo "Контроллер $controller не найден";
+                http_response_code(404);
+                include '404.html';
+            }
         }
     }
+
+    /**
+     * @param $name string
+     * принимает контроллер и приводит его к нужному виду
+     */
+    protected static function upperCamelCase($name)
+    {
+        $name = str_replace('-',' ', $name);
+        $name = ucwords($name);
+        $name = str_replace(' ', '', $name);
+        debug($name);
+        return $name;
+    }
+
 
     /**для тестирования
      * проверить таплицу маршрутов

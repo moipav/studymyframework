@@ -2,6 +2,9 @@
 
 require_once '../vendor/core/Router.php';
 require_once '../vendor/libs/functions.php';
+require_once '../app/controllers/Main.php';
+require_once '../app/controllers/Posts.php';
+require_once '../app/controllers/PostsNew.php';
 
 $query = rtrim($_SERVER['QUERY_STRING'], '/');
 /*
@@ -11,7 +14,7 @@ Router::add('', ['controller'=>'Main', 'action'=>'index']);*/
 
 //маршрутизацию по умолначию  делаем при помощи регулярных выражений
 Router::add('^$', ['controller'=>'Main', 'action'=>'index']);//сответствует пустой строке
-Router::add('^(?P<controller>[a-z-]+)/(?P<action>[a-z-]+)?$');//свободно вводимые данные будут обрабатываться в Router и проверяться на соответствие
+Router::add('^(?P<controller>[a-z-]+)/?(?P<action>[a-z-]+)?$');//свободно вводимые данные будут обрабатываться в Router и проверяться на соответствие
 debug(Router::getRoutes());
 
 /*
