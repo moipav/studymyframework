@@ -1,14 +1,11 @@
 <?php
 
 namespace app\controllers;
-class Posts
+use vendor\core\base\Controller;
+class Posts extends Controller
 {
-    public function __construct()
-    {
-        echo __CLASS__ . ' how mach is the fish';
-    }
 
-    public function indexAction()
+    public function indexAction ()
     {
         echo __CLASS__ . ' !!!' . __METHOD__;
     }
@@ -20,6 +17,7 @@ class Posts
 
     public function testPageAction()
     {
-        echo  __METHOD__;
+       echo  __METHOD__;
     }
+
 }

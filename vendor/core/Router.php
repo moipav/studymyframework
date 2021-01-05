@@ -22,7 +22,8 @@ class Router
     {
         foreach (self::$routes as $pattern => $route){
             if(preg_match("#$pattern#i", $url, $matches)){
-
+                debug(self::$routes);
+                debug($route);
                 foreach ($matches as $k => $v){
                     if(is_string($k)){
                         $route[$k]=$v;
@@ -31,7 +32,8 @@ class Router
                 if(!isset($route['action'])){
                     $route['action'] = 'index';
                 }
-                debug($route);
+
+                $route['controller'] = self::upperCamelCase($route['controller']);
                 self::$route = $route;
                 return true;
             }
@@ -48,18 +50,19 @@ class Router
     //если mathRoute успешно отработает все ок иначе 404
     public static function dispath($url)
     {
+        $url = self::removeQueryString($url);
+      //  var_dump($url);
         if(self::machRoute($url)){
             $controller = 'app\\controllers\\'. self::upperCamelCase(self::$route['controller']);
             if(class_exists($controller)){
-                $controllerObject = new $controller;
+                //debug(self::$route);
+                $controllerObject = new $controller(self::$route);
                 $action = self::lowerCamelCase(self::$route['action']) .'Action';
-
                 if(method_exists($controllerObject, $action)){
                     $controllerObject->$action();
                 }else{
                     echo "Метод <b>$controller::$action</b> не найден";
                 }
-
             }else{
                 echo "Контроллер $controller не найден";
                 http_response_code(404);
@@ -77,10 +80,24 @@ class Router
         $name = str_replace('-',' ', $name);
         $name = ucwords($name);
         $name = str_replace(' ', '', $name);
-        debug($name);
+
         return $name;
     }
 
+    protected static function removeQueryString($url)
+    {
+        if($url){
+            $params = explode('&', $url, 2);
+            if(false === strpos($params[0], '=')){
+                return rtrim($params[0], '/');
+            }else{
+                return '';
+            }
+
+        }
+
+        return $url;
+    }
 
     protected static function lowerCamelCase($name)
     {

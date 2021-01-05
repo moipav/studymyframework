@@ -15,7 +15,7 @@ define('APP', dirname(__DIR__) . '/app');
 
 spl_autoload_register(function ($class){
     $file = ROOT . '/' . str_replace('\\','/', $class). '.php';
-    echo $file;
+//    echo $file;
 
     if(is_file($file)){
         require_once $file;
@@ -24,12 +24,13 @@ spl_autoload_register(function ($class){
 
 $query = rtrim($_SERVER['QUERY_STRING'], '/');
 //собственные правила создаются выше, чтобы они были приоритетнее
-Router::add('^pages/?', ['controller'=>'Posts', 'action'=>'index']);
+Router::add('^page/(?P<action>[a-z-]+)/(?P<alias>[a-z-]+)$', ['controller'=>'Page']);
+Router::add('^page/(?P<alias>[a-z-]+)$', ['controller'=>'Page', 'action' => 'view']);
 
 //маршрутизацию по умолначию  делаем при помощи регулярных выражений
 Router::add('^$', ['controller'=>'Main', 'action'=>'index']);//сответствует пустой строке
 Router::add('^(?P<controller>[a-z-]+)/?(?P<action>[a-z-]+)?$');//свободно вводимые данные будут обрабатываться в Router и проверяться на соответствие
-debug(Router::getRoutes());
+
 
 /*
 if(Router::machRoute($query)){

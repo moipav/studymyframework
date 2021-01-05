@@ -1,25 +1,23 @@
 <?php
 
 namespace app\controllers;
-class PostsNew
+use vendor\core\base\Controller;
+
+class PostsNew extends Controller
 {
-    public function __construct()
-    {
-        echo __CLASS__ . ' how mach is the fish';
-    }
 
     public function indexAction()
     {
-        echo  __METHOD__;
+       // echo  __METHOD__;
     }
 
     public function testAction()
     {
-        echo  __METHOD__;
+        //echo  __METHOD__;
     }
 
     public function testPageAction()
     {
-        echo  __METHOD__;
+        //echo  __METHOD__;
     }
 }
