@@ -1,5 +1,6 @@
 <?php
 
+namespace vendor\core;
 
 class Router
 {
@@ -48,10 +49,10 @@ class Router
     public static function dispath($url)
     {
         if(self::machRoute($url)){
-            $controller = self::upperCamelCase(self::$route['controller']);
+            $controller = 'app\\controllers\\'. self::upperCamelCase(self::$route['controller']);
             if(class_exists($controller)){
                 $controllerObject = new $controller;
-                $action = self::$route['action'];
+                $action = self::lowerCamelCase(self::$route['action']) .'Action';
 
                 if(method_exists($controllerObject, $action)){
                     $controllerObject->$action();
@@ -81,6 +82,10 @@ class Router
     }
 
 
+    protected static function lowerCamelCase($name)
+    {
+        return $name = lcfirst(self::upperCamelCase($name));
+    }
     /**для тестирования
      * проверить таплицу маршрутов
      * @return array

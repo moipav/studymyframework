@@ -1,6 +1,6 @@
 <?php
 
-
+namespace app\controllers;
 class Posts
 {
     public function __construct()
@@ -8,8 +8,18 @@ class Posts
         echo __CLASS__ . ' how mach is the fish';
     }
 
-    public function index()
+    public function indexAction()
     {
         echo __CLASS__ . ' !!!' . __METHOD__;
+    }
+
+    public function testAction()
+    {
+        echo  __METHOD__;
+    }
+
+    public function testPageAction()
+    {
+        echo  __METHOD__;
     }
 }
